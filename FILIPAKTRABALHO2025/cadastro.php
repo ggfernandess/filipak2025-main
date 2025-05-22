@@ -6,6 +6,7 @@ require_once "conexao.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = trim($_POST["nome"]);
     $email = trim($_POST["email"]);
+    $cpf = trim($_POST["cpf"]);
     $senha = $_POST["senha"];
 
    
@@ -19,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $erro = "Email já cadastrado.";
     } else {
         $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO usuarios (nome, email,cpf, senha) VALUES (?,?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $nome, $email, $senha_hash);
+        $stmt->bind_param("ssss", $nome, $email,$cpf, $senha_hash);
         if ($stmt->execute()) {
             $_SESSION['mensagem'] = "Cadastro realizado com sucesso! Você pode entrar agora.";
             header("Location: login.php");
@@ -77,12 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <br>
     <?php if (!empty($erro)) echo "<p style='color:red;'>$erro</p>"; ?>
 <div class="container my-1 py-4 bg-light rounded align-items-center col-12 col-sm-10 col-md-6 col-lg-4 mx-auto">
-    <form action="login.php" method="post" class="form-signin">
+    <form action="" method="post" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Cadastrar-se:</h1>
         <label for="inputEmail" class="sr-only">Nome:</label><br>
         <input type="text" class="form-control" placeholder="Nome" required autofocus name="nome">
         <label for="inputEmail" class="sr-only">Email:</label><br>
         <input type="email" class="form-control" placeholder="Email" required autofocus name="email">
+        <label for="inputCpf" class="sr-only">CPF:</label><br>
+        <input type="cpf" class="form-control" placeholder="CPF" required autofocus name="cpf">
         <label for="inputPassword" class="sr-only">Senha:</label><br>
         <input type="password" class="form-control" placeholder="Senha" required name="senha"><br><br>
 
