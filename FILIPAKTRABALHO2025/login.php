@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 require_once "conexao.php";
@@ -39,9 +40,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8" />
     <title>Entrar</title>
+    <link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-    <h2>Entrar</h2>
+<body class="text-center">
+<header class="bg-dark"> <!-- cabeçalho -->
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4" href="index.html"></li> 
+          <li class="d-none d-lg-block"><a href="#" class="nav-link px-2 text-white">Sobre nós e SAC</a></li>
+        </ul>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> <!-- opções -->
+          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Comprar</strong></a></li>
+          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Vender</strong></a></li>
+          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Melhores ofertas</strong></a></li>
+        </ul>
+
+        <form class="col-12 col-xl-auto mb-3 mb-xl-0 me-xl-3 d-none d-xl-block"> <!-- barra de pesquisa -->
+          <input type="search" class="form-control form-control-dark" placeholder="Pesquisar..." aria-label="Search">
+        </form>
+
+        <div class="d-block d-xl-none me-3">
+          <button class="btn btn-outline-light mb-3 mb-lg-0" type="button">
+            <i>🔍</i>
+          </button>
+        </div>
+
+        <div class="text-end"> <!-- botões -->
+
+          <a href="cadastro.php"><button type="button" class="btn btn-warning mb-3 mb-lg-0">Cadastrar</button></a>
+        </div>
+
+      </div>
+    </div>
+</header>
+<br>
 
     <?php
     if (!empty($_SESSION['mensagem'])) {
@@ -49,18 +84,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         unset($_SESSION['mensagem']);
     }
     if (!empty($erro)) echo "<p style='color:red;'>$erro</p>";
-    ?>
+    ?> 
 
-    <form action="login.php" method="post">
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+<div class="container my-1 py-4 bg-light rounded align-items-center col-12 col-sm-10 col-md-6 col-lg-4 mx-auto">
+    <form action="login.php" method="post" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Entrar:</h1>
+        <label for="inputEmail" class="sr-only">Email:</label><br>
+        <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus name="email">
+        <label for="inputPassword" class="sr-only">Senha:</label><br>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Senha" required name="senha"><br><br>
 
-        <label>Senha:</label><br>
-        <input type="password" name="senha" required><br><br>
-
-        <button type="submit">Entrar</button>
+        <button class="btn btn-lg btn-warning btn-block" type="submit">Entrar</button>
+        <hr>
+        <p>Ainda não tem uma conta? <a href="cadastro.php" class="text-warning">Cadastre-se aqui</a></p>
     </form>
+</div>
 
-    <p>Não tem conta? <a href="cadastro.php">Cadastre-se aqui</a></p>
 </body>
 </html>
