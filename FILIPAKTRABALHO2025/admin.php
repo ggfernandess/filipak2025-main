@@ -7,13 +7,13 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'admin') {
 
 require 'conexao.php';
 
-echo "<h2>Bem-vindo Admin, " . $_SESSION['usuario_nome'] . "</h2>";
-
 if (isset($_GET['aprovar'])) {
     $id = intval($_GET['aprovar']);
     $query = "UPDATE publicacoes SET aprovado = 1 WHERE id = $id";
     mysqli_query($conn, $query);
-    echo "<p style='color: green;'>Publicação aprovada!</p>";
+    $baseUrl = dirname($_SERVER['PHP_SELF']);
+    header("Location: $baseUrl/index.php");
+    exit();
 }
 
 if (isset($_GET['excluir'])) {
@@ -22,6 +22,8 @@ if (isset($_GET['excluir'])) {
     mysqli_query($conn, $query);
     echo "<p style='color: red;'>Publicação excluída!</p>";
 }
+
+echo "<h2>Bem-vindo Admin, " . $_SESSION['usuario_nome'] . "</h2>";
 
 $sql = "SELECT p.id, u.nome AS nome_usuario, p.titulo, p.conteudo
         FROM publicacoes p
@@ -38,11 +40,10 @@ if (mysqli_num_rows($result) > 0) {
         echo "<strong>Usuário:</strong> " . $row['nome_usuario'] . "<br>";
         echo "<strong>Título:</strong> " . $row['titulo'] . "<br>";
         echo "<strong>Conteúdo:</strong><br>" . nl2br($row['conteudo']) . "<br><br>";
-        echo "<a href='adm.php?aprovar=" . $row['id'] . "'>✅ Aprovar</a> | ";
-        echo "<a href='adm.php?excluir=" . $row['id'] . "' onclick=\"return confirm('Tem certeza que deseja excluir?')\">❌ Excluir</a>";
+        echo "<a href='admin.php?aprovar=" . $row['id'] . "'>✅ Aprovar</a> | ";
+        echo "<a href='admin.php?excluir=" . $row['id'] . "' onclick=\"return confirm('Tem certeza que deseja excluir?')\">❌ Excluir</a>";
         echo "</div>";
     }
 } else {
     echo "<p>Não há publicações pendentes no momento.</p>";
 }
-?>
