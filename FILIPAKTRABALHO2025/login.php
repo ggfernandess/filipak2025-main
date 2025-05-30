@@ -48,30 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4" href="index.html"></li> 
+          <li><a href="index.php"><img  src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"><a></li> 
           <li class="d-none d-lg-block"><a href="#" class="nav-link px-2 text-white">Sobre nós e SAC</a></li>
         </ul>
-
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"> <!-- opções -->
-          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Comprar</strong></a></li>
-          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Vender</strong></a></li>
-          <li><a href="#" class="nav-link px-2 text-white me-4"><strong>Melhores ofertas</strong></a></li>
-        </ul>
-
-        <form class="col-12 col-xl-auto mb-3 mb-xl-0 me-xl-3 d-none d-xl-block"> <!-- barra de pesquisa -->
-          <input type="search" class="form-control form-control-dark" placeholder="Pesquisar..." aria-label="Search">
-        </form>
-
-        <div class="d-block d-xl-none me-3">
-          <button class="btn btn-outline-light mb-3 mb-lg-0" type="button">
-            <i>🔍</i>
-          </button>
-        </div>
-
-        <div class="text-end"> <!-- botões -->
-
-          <a href="cadastro.php"><button type="button" class="btn btn-warning mb-3 mb-lg-0">Cadastrar</button></a>
-        </div>
 
       </div>
     </div>
@@ -99,6 +78,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Ainda não tem uma conta? <a href="cadastro.php" class="text-warning">Cadastre-se aqui</a></p>
     </form>
 </div>
+
+  <div class="container align-items-center">
+    <footer class="py-3 my-4">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
+      </ul>
+      <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
+    </footer>
+  </div>
 
 </body>
 </html>
