@@ -1,6 +1,13 @@
 <?php
 require 'conexao.php';
 
+$tiposFiltrados = [];
+if (isset($_GET['tipo_veiculo']) && is_array($_GET['tipo_veiculo'])) {
+    $tiposFiltrados = array_filter($_GET['tipo_veiculo'], function($v) {
+        return in_array(intval($v), [1, 2]);
+    });
+}
+
 $sql = "SELECT 
             p.titulo, 
             p.conteudo, 
@@ -9,13 +16,32 @@ $sql = "SELECT
             p.ano_carro,
             p.preco,
             p.data_publicacao,
-            u.nome AS autor 
+            u.nome AS autor,
+            p.tipo_veiculo
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
-        WHERE p.aprovado = 1
-        ORDER BY p.data_publicacao DESC";
+        WHERE p.aprovado = 1";
 
-$result = mysqli_query($conn, $sql);
+if (!empty($tiposFiltrados)) {
+    $placeholders = implode(',', array_fill(0, count($tiposFiltrados), '?'));
+    $sql .= " AND p.tipo_veiculo IN ($placeholders)";
+}
+
+$sql .= " ORDER BY p.data_publicacao DESC";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if (!empty($tiposFiltrados)) {
+    $types = str_repeat('i', count($tiposFiltrados));
+    $refs = [];
+    foreach ($tiposFiltrados as $key => $value) {
+        $refs[$key] = &$tiposFiltrados[$key];
+    }
+    mysqli_stmt_bind_param($stmt, $types, ...$refs);
+}
+
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 
 $publicacoes_aprovadas = [];
 if ($result && mysqli_num_rows($result) > 0) {
@@ -61,6 +87,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
   </header>
 
+  <!-- Banner com links de motos e carros -->
   <div class="container my-1">
     <div class="d-flex justify-content-center align-items-center bg-dark rounded overflow-hidden" style="height: 300px;">
       <div class="w-100 h-100 d-flex justify-content-center align-items-end" style="background-image: url('carroFundo.jpg'); background-position: left center;">
@@ -72,22 +99,41 @@ if ($result && mysqli_num_rows($result) > 0) {
     </div>
   </div>
 
-<div class="container mt-4">
+  <!-- FILTRO TIPO VEICULO -->
+  <div class="container mt-4 mb-3">
+    <form method="GET" class="d-flex gap-3 align-items-center">
+        <label class="form-check-label">
+            <input type="checkbox" name="tipo_veiculo[]" value="1" class="form-check-input"
+                <?= (in_array(1, $tiposFiltrados)) ? 'checked' : '' ?>>
+            Carro
+        </label>
+        <label class="form-check-label">
+            <input type="checkbox" name="tipo_veiculo[]" value="2" class="form-check-input"
+                <?= (in_array(2, $tiposFiltrados)) ? 'checked' : '' ?>>
+            Moto
+        </label>
+        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+        <a href="publicacoes.php" class="btn btn-secondary btn-sm">Limpar filtro</a>
+    </form>
+  </div>
+
+  <div class="container mt-4">
     <div class="row">
         <?php foreach ($publicacoes_aprovadas as $pub): ?>
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <?php if (!empty($pub['imagem'])): ?>
-                        <img src="uploads/<?= htmlspecialchars($pub['imagem']) ?>" class="card-img-top" alt="Imagem do carro">
+                        <img src="uploads/<?= htmlspecialchars($pub['imagem']) ?>" class="card-img-top" alt="Imagem do veículo">
                     <?php endif; ?>
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($pub['titulo']) ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted">por <?= htmlspecialchars($pub['autor']) ?></h6>
                         <p class="mb-1">
                             <strong>Modelo:</strong> <?= htmlspecialchars($pub['modelo_carro']) ?><br>
-                            <strong>Ano:</strong> <?= htmlspecialchars($pub['ano_carro']) ?>
-                            <p><strong>Preço:</strong> R$ <?= number_format($pub['preco'], 2, ',', '.') ?></p>
+                            <strong>Ano:</strong> <?= htmlspecialchars($pub['ano_carro']) ?><br>
+                            <strong>Tipo:</strong> <?= ($pub['tipo_veiculo'] == 1) ? "Carro" : "Moto" ?>
                         </p>
+                        <p><strong>Preço:</strong> R$ <?= number_format($pub['preco'], 2, ',', '.') ?></p>
                         <p class="card-text"><?= nl2br(htmlspecialchars($pub['conteudo'])) ?></p>
                     </div>
                     <div class="card-footer text-muted">
@@ -96,8 +142,11 @@ if ($result && mysqli_num_rows($result) > 0) {
                 </div>
             </div>
         <?php endforeach; ?>
+        <?php if (empty($publicacoes_aprovadas)): ?>
+            <p class="text-center">Nenhuma publicação encontrada com esse filtro.</p>
+        <?php endif; ?>
     </div>
-</div>
+  </div>
 
   <div class="container align-items-center">
     <footer class="py-3 my-4">
