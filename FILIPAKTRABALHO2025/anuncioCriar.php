@@ -1,11 +1,11 @@
 <link href="bootstrap.min.css" rel="stylesheet">
 
 <header class="bg-dark">
-  <div class="container">
+  <div class="container py-1">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
-        <li class="d-none d-lg-block"><a href="#" class="nav-link px-2 text-white">Sobre nós e SAC</a></li>
+          <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
       </ul>
     </div>
   </div>
@@ -19,8 +19,6 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'usuario') 
 }
 
 require 'conexao.php'; 
-
-echo "Bem-vindo usuário, " . $_SESSION['usuario_nome'] . "<br>";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = $_POST['titulo'];
@@ -52,36 +50,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<div class="container align-items-center text-center py-3">
+  <div class="p-5 mb-4 bg-white rounded shadow-sm">
+  <h3>Nova Publicação</h3>
+  <form method="POST" enctype="multipart/form-data" class="mb-4 ">
+      <input type="text" name="titulo" placeholder="Título" class="form-control mb-2" minlength="2" maxlength="20" required>
 
-<h3>Nova Publicação</h3>
-<form method="POST" enctype="multipart/form-data" class="mb-4">
-    <input type="text" name="titulo" placeholder="Título" class="form-control mb-2" required>
+      <input type="text" name="modelo_carro" placeholder="Modelo do carro" class="form-control mb-2" minlength="2" maxlength="24" required>
 
-    <input type="text" name="modelo_carro" placeholder="Modelo do carro" class="form-control mb-2" required>
+      <input type="number" name="ano_carro" placeholder="Ano do carro" class="form-control mb-2" min="1900" max="<?= date('Y') ?>" required>
 
-    <input type="number" name="ano_carro" placeholder="Ano do carro" class="form-control mb-2" min="1900" max="<?= date('Y') ?>" required>
+      <input type="number" step="0.01" min="0" class="form-control mb-2" id="preco" name="preco" placeholder="Preço" max="1000000" required>
 
-    <input type="number" step="0.01" min="0" class="form-control mb-2" id="preco" name="preco" placeholder="Preço" required>
-
-   <div style="margin-left: 1cm;">
-  <label class="form-label fw-bold">Tipo de Veículo:</label><br>
-  <div class="form-check form-check-inline mb-2">
-      <input class="form-check-input" type="radio" name="tipo_veiculo" id="carro" value="1" checked>
-      <label class="form-check-label" for="carro">Carro</label>
+    <div style="margin-left: 1cm;">
+    <label class="form-label fw-bold">Tipo de Veículo:</label><br>
+    <div class="form-check form-check-inline mb-2">
+        <input class="form-check-input" type="radio" name="tipo_veiculo" id="carro" value="1" checked>
+        <label class="form-check-label" for="carro">Carro</label>
+    </div>
+    <div class="form-check form-check-inline mb-2">
+        <input class="form-check-input" type="radio" name="tipo_veiculo" id="moto" value="2">
+        <label class="form-check-label" for="moto">Moto</label>
+    </div>
   </div>
-  <div class="form-check form-check-inline mb-2">
-      <input class="form-check-input" type="radio" name="tipo_veiculo" id="moto" value="2">
-      <label class="form-check-label" for="moto">Moto</label>
-  </div>
+      <textarea name="conteudo" placeholder="Escreva sua descrição..." class="form-control mb-2" minlength="2" maxlength="255" required></textarea>
+
+      <input type="file" name="imagem" accept="image/*" class="form-control mb-3">
+
+      <button type="submit" class="btn btn-warning">Publicar</button>
+  </form>
+  </div>    
 </div>
-
-
-    <textarea name="conteudo" placeholder="Escreva sua descrição..." class="form-control mb-2" required></textarea>
-
-    <input type="file" name="imagem" accept="image/*" class="form-control mb-3">
-
-    <button type="submit" class="btn btn-warning">Publicar</button>
-</form>
 
 <div class="container align-items-center">
   <footer class="py-3 my-4">
@@ -89,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
       <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
       <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
+      <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
     </ul>
     <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
   </footer>

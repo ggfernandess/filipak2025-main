@@ -45,12 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="text-center">
 <header class="bg-dark"> <!-- cabeçalho -->
-    <div class="container">
+    <div class="container py-1">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li><a href="index.php"><img  src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"><a></li> 
-          <li class="d-none d-lg-block"><a href="#" class="nav-link px-2 text-white">Sobre nós e SAC</a></li>
+          <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
         </ul>
 
       </div>
@@ -62,13 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form action="" method="post" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Cadastrar-se:</h1>
         <label for="inputEmail" class="sr-only">Nome:</label><br>
-        <input type="text" class="form-control" placeholder="Nome" required autofocus name="nome">
+        <input type="text" class="form-control" placeholder="Nome" required autofocus name="nome" maxlength="30">
         <label for="inputEmail" class="sr-only">Email:</label><br>
-        <input type="email" class="form-control" placeholder="Email" required autofocus name="email">
+        <input type="email" class="form-control" placeholder="Email" required autofocus name="email" maxlength="30">
         <label for="inputCpf" class="sr-only">CPF:</label><br>
-        <input type="cpf" class="form-control" placeholder="CPF" required autofocus name="cpf">
+        <input type="text" class="form-control" placeholder="CPF" required autofocus name="cpf" inputmode="numeric" minlength="11" maxlength="11" pattern="\d{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         <label for="inputPassword" class="sr-only">Senha:</label><br>
-        <input type="password" class="form-control" placeholder="Senha" required name="senha"><br><br>
+        <input type="password" class="form-control" placeholder="Senha" required name="senha" minlength="6" maxlength="30"><br><br>
 
         <button class="btn btn-lg btn-warning btn-block" type="submit">Cadastrar</button>
         <hr>
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
         <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
+        <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
     </footer>

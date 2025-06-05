@@ -21,8 +21,20 @@ $resultado = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Meus Anúncios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap.min.css" rel="stylesheet">
 </head>
+
+    <header class="bg-dark">
+    <div class="container py-1">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
+          <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
 <body class="bg-light">
     <div class="container py-5">
         <h1 class="mb-4 text-center">Meus Anúncios</h1>
@@ -54,5 +66,17 @@ $resultado = $stmt->get_result();
             <a href="user.php" class="btn btn-secondary">← Voltar para o Painel</a>
         </div>
     </div>
+
+      <div class="container align-items-center">
+    <footer class="py-3 my-4">
+      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+        <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
+      </ul>
+      <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
+    </footer>
+  </div>
 </body>
 </html>
