@@ -26,7 +26,7 @@ if (isset($_GET['excluir'])) {
 }
 
 // Buscar publicações pendentes
-$sql = "SELECT p.id, u.nome AS nome_usuario, p.titulo, p.conteudo, p.modelo_carro, p.ano_carro, p.data_publicacao, p.imagem
+$sql = "SELECT p.id, u.nome AS nome_usuario, p.titulo, p.conteudo, p.modelo_carro, p.ano_carro, p.data_publicacao, p.imagem,p.contato
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.aprovado = 0
@@ -73,7 +73,8 @@ $resultado = mysqli_query($conn, $sql);
                             <h6 class="card-subtitle mb-2 text-muted">Por <?= htmlspecialchars($row['nome_usuario']) ?></h6>
                             <p class="mb-1">
                                 <strong>Modelo:</strong> <?= htmlspecialchars($row['modelo_carro']) ?><br>
-                                <strong>Ano:</strong> <?= htmlspecialchars($row['ano_carro']) ?>
+                                <strong>Ano:</strong> <?= htmlspecialchars($row['ano_carro']) ?><br>
+                                <strong>Contato:</strong> <?= htmlspecialchars($row['contato']) ?>
                             </p>
                             <p class="card-text"><?= nl2br(htmlspecialchars($row['conteudo'])) ?></p>
                             <div class="d-flex justify-content-between">

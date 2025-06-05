@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario_id = $_SESSION['usuario_id'];
     $preco = isset($_POST['preco']) ? floatval($_POST['preco']) : 0;
     $tipo_veiculo = isset($_POST['tipo_veiculo']) ? intval($_POST['tipo_veiculo']) : 1;
+    $contato = ($_POST['contato']);
 
     $imagem_nome = null;
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] == 0) {
@@ -37,11 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt = mysqli_prepare($conn, "INSERT INTO publicacoes 
-        (usuario_id, titulo, conteudo, modelo_carro, ano_carro, data_publicacao, preco, imagem, tipo_veiculo, aprovado) 
-        VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, 0)");
+    (usuario_id, titulo, conteudo, modelo_carro, ano_carro, data_publicacao, preco, imagem, tipo_veiculo, aprovado, contato) 
+    VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, 0, ?)");
+
 
     if ($stmt) {
-       mysqli_stmt_bind_param($stmt, "isssidsi", $usuario_id, $titulo, $conteudo, $modelo_carro, $ano_carro, $preco, $imagem_nome, $tipo_veiculo);
+       mysqli_stmt_bind_param($stmt, "isssidsis", $usuario_id, $titulo, $conteudo, $modelo_carro, $ano_carro, $preco, $imagem_nome, $tipo_veiculo,$contato);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         echo "<p class='alert alert-success'>Publicação enviada para aprovação!</p>";
@@ -61,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <input type="number" name="ano_carro" placeholder="Ano do carro" class="form-control mb-2" min="1900" max="<?= date('Y') ?>" required>
 
       <input type="number" step="0.01" min="0" class="form-control mb-2" id="preco" name="preco" placeholder="Preço" max="1000000" required>
+
+      <input type="text" name="contato" placeholder="Número ou email para contato" class="form-control mb-2" minlength="9" maxlength="50"   required>
 
     <div style="margin-left: 1cm;">
     <label class="form-label fw-bold">Tipo de Veículo:</label><br>

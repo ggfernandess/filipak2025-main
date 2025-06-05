@@ -14,6 +14,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             p.preco, 
             p.data_publicacao,
             p.tipo_veiculo,
+            p.contato,
             u.nome AS autor
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
@@ -85,6 +86,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <li class="list-group-item"><strong>Ano:</strong> <?= htmlspecialchars($anuncio['ano_carro']) ?></li>
             <li class="list-group-item"><strong>Tipo:</strong> <?= ($anuncio['tipo_veiculo'] == 1) ? "Carro" : "Moto" ?></li>
             <li class="list-group-item"><strong>Preço:</strong> R$ <?= number_format($anuncio['preco'], 2, ',', '.') ?></li>
+            <li class="list-group-item"> <strong>Contato:</strong> <?= htmlspecialchars($anuncio['contato']) ?></li>
           </ul>
           
           <div class="mt-4">

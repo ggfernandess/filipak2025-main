@@ -18,7 +18,8 @@ $sql = "SELECT
             p.preco,
             p.data_publicacao,
             u.nome AS autor,
-            p.tipo_veiculo
+            p.tipo_veiculo,
+            p.contato
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.aprovado = 1";
@@ -125,8 +126,10 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <strong>Modelo:</strong> <?= htmlspecialchars($pub['modelo_carro']) ?><br>
                             <strong>Ano:</strong> <?= htmlspecialchars($pub['ano_carro']) ?><br>
                             <strong>Tipo:</strong> <?= ($pub['tipo_veiculo'] == 1) ? "Carro" : "Moto" ?>
+                            
                         </p>
                         <p><strong>Preço:</strong> R$ <?= number_format($pub['preco'], 2, ',', '.') ?></p>
+                        <strong>Contato:</strong> <?= htmlspecialchars($pub['contato']) ?><br>
                         <p class="card-text"><?= nl2br(htmlspecialchars($pub['conteudo'])) ?></p>
                     </div>
                     <div class="card-footer text-muted">
