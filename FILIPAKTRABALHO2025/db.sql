@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/05/2025 às 22:20
+-- Tempo de geração: 06/06/2025 às 18:49
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -38,8 +38,11 @@ CREATE TABLE `publicacoes` (
   `modelo_carro` varchar(100) DEFAULT NULL,
   `ano_carro` year(4) DEFAULT NULL,
   `data_anuncio` datetime DEFAULT current_timestamp(),
-  `preco` decimal(10,2) NOT NULL DEFAULT 0.00
+  `preco` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `tipo_veiculo` tinyint(4) NOT NULL DEFAULT 1,
+  `contato` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- --------------------------------------------------------
 
@@ -52,9 +55,10 @@ CREATE TABLE `usuarios` (
   `nome` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `tipo` varchar(20) NOT NULL DEFAULT 'usuario',
+  `tipo` varchar(20)  NOT NULL DEFAULT 'usuario',
   `cpf` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Índices para tabelas despejadas
@@ -81,13 +85,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `publicacoes`
 --
 ALTER TABLE `publicacoes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
