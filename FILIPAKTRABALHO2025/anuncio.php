@@ -61,10 +61,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
           </button>
           </a>
         </div>
-        <div class="text-end">
-          <a href="login.php"><button type="button" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Entrar</button></a>
-          <a href="cadastro.php"><button type="button" class="btn btn-warning mb-3 mb-lg-0">Cadastrar</button></a>
-        </div>
+          <div class="text-end" id="botoesAuth">
+            <a href="login.php" class="btn btn-outline-light me-2 mb-3 mb-lg-0" id="botaoEntrar">Entrar</a>
+            <a href="cadastro.php" class="btn btn-warning mb-3 mb-lg-0" id="botaoCadastrar">Cadastrar</a>
+          </div>
+
+          <div class="text-end d-none" id="menuUsuario">
+            <a href="#" id="linkPerfil" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Meu Perfil</a>
+            <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+          </div>
       </div>
     </div>
   </header>
@@ -86,7 +91,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <li class="list-group-item"><strong>Ano:</strong> <?= htmlspecialchars($anuncio['ano_carro']) ?></li>
             <li class="list-group-item"><strong>Tipo:</strong> <?= ($anuncio['tipo_veiculo'] == 1) ? "Carro" : "Moto" ?></li>
             <li class="list-group-item"><strong>Preço:</strong> R$ <?= number_format($anuncio['preco'], 2, ',', '.') ?></li>
-            <li class="list-group-item"> <strong>Contato:</strong> <?= htmlspecialchars($anuncio['contato']) ?></li>
+            <li class="list-group-item"><strong>Contato:</strong> <?= htmlspecialchars($anuncio['contato']) ?></li>
           </ul>
           
           <div class="mt-4">
@@ -106,14 +111,46 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   <div class="container align-items-center">
     <footer class="py-3 my-4">
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
     </footer>
   </div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('check_login.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.logged_in) {
+                const botoesAuth = document.getElementById('botoesAuth');
+                if (botoesAuth) {
+                    botoesAuth.classList.add('d-none');
+                }
+
+                const menuUser = document.getElementById('menuUsuario');
+                if (menuUser) {
+                    menuUser.classList.remove('d-none');
+                }
+                const perfilLink = document.getElementById('linkPerfil');
+                if (perfilLink) {
+                    if (data.tipo === 'admin') {
+                        perfilLink.setAttribute('href', 'admin.php');
+                    } else {
+                        perfilLink.setAttribute('href', 'user.php');
+                    }
+
+                    if (data.nome) {
+                        perfilLink.textContent = `${data.nome}`;
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Erro ao verificar login:', error));
+});
+</script>
 
 </body>
 </html>

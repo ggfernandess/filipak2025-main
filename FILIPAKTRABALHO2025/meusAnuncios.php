@@ -31,6 +31,9 @@ $resultado = $stmt->get_result();
           <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
           <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
         </ul>
+        <div class="text-end" id="menuUsuario">
+          <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+        </div>
       </div>
     </div>
   </header>
@@ -70,9 +73,8 @@ $resultado = $stmt->get_result();
       <div class="container align-items-center">
     <footer class="py-3 my-4">
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>

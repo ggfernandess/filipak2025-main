@@ -1,9 +1,10 @@
-
 <?php
 session_start();
 require_once "conexao.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    header('Content-Type: application/json'); // Muito importante: responde JSON
+
     $email = trim($_POST["email"]);
     $senha = $_POST["senha"];
 
@@ -20,20 +21,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['usuario_tipo'] = $usuario['tipo'];
 
-            if ($usuario['tipo'] === 'admin') {
-                header("Location: admin.php");
-            } else {
-                header("Location: user.php");
-            }
+            echo json_encode([
+                "success" => true,
+                "tipo" => $usuario['tipo']
+            ]);
             exit;
         } else {
-            $erro = "Senha incorreta.";
+            echo json_encode([
+                "success" => false,
+                "error" => "Senha incorreta."
+            ]);
+            exit;
         }
     } else {
-        $erro = "Usuário não encontrado.";
+        echo json_encode([
+            "success" => false,
+            "error" => "Usuário não encontrado."
+        ]);
+        exit;
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -43,30 +52,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="bootstrap.min.css" rel="stylesheet" type="text/css">
 </head>
 <body class="text-center">
-<header class="bg-dark"> <!-- cabeçalho -->
+
+<header class="bg-dark">
     <div class="container py-1">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="index.php"><img  src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"><a></li> 
-          <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
-        </ul>
-
-      </div>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="index.php"><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></a></li> 
+                <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
+            </ul>
+        </div>
     </div>
 </header>
+
 <br>
 
-    <?php
-    if (!empty($_SESSION['mensagem'])) {
-        echo "<p style='color:green;'>" . $_SESSION['mensagem'] . "</p>";
-        unset($_SESSION['mensagem']);
-    }
-    if (!empty($erro)) echo "<p style='color:red;'>$erro</p>";
-    ?> 
+<div id="mensagem" class="container my-1 py-2 col-12 col-sm-10 col-md-6 col-lg-4 mx-auto"></div>
 
 <div class="container my-1 py-4 bg-light rounded align-items-center col-12 col-sm-10 col-md-6 col-lg-4 mx-auto">
-    <form action="login.php" method="post" class="form-signin">
+    <form id="formLogin" class="form-signin">
         <h1 class="h3 mb-3 font-weight-normal">Entrar:</h1>
         <label for="inputEmail" class="sr-only">Email:</label><br>
         <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus name="email">
@@ -79,17 +82,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </div>
 
-  <div class="container align-items-center">
+<div class="container align-items-center">
     <footer class="py-3 my-4">
-      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-        <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
-      </ul>
-      <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
+        <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
+            <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
+            <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
+        </ul>
+        <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
     </footer>
-  </div>
+</div>
+
+<!-- Aqui começa o script para enviar o login sem refresh -->
+<script>
+document.getElementById('formLogin').addEventListener('submit', function(e) {
+    e.preventDefault(); // Impede o envio tradicional
+
+    const formData = new FormData(this);
+
+    fetch('login.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        const mensagemDiv = document.getElementById('mensagem');
+        if (data.success) {
+            mensagemDiv.innerHTML = "<div class='alert alert-success'>Login realizado com sucesso! Redirecionando...</div>";
+            setTimeout(() => {
+                if (data.tipo === 'admin') {
+                    window.location.href = 'admin.php';
+                } else {
+                    window.location.href = 'user.php';
+                }
+            }, 400);
+        } else {
+            mensagemDiv.innerHTML = "<div class='alert alert-danger'>" + data.error + "</div>";
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('mensagem').innerHTML = "<div class='alert alert-danger'>Erro na requisição.</div>";
+    });
+});
+</script>
 
 </body>
+</html>
 </html>

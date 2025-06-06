@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'conexao.php';
 
 $tiposFiltrados = [];
@@ -18,8 +19,7 @@ $sql = "SELECT
             p.preco,
             p.data_publicacao,
             u.nome AS autor,
-            p.tipo_veiculo,
-            p.contato
+            p.tipo_veiculo
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.aprovado = 1";
@@ -77,17 +77,22 @@ if ($result && mysqli_num_rows($result) > 0) {
           </button>
           </a>
         </div>
-        <div class="text-end">
-          <a href="login.php"><button type="button" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Entrar</button></a>
-          <a href="cadastro.php"><button type="button" class="btn btn-warning mb-3 mb-lg-0">Cadastrar</button></a>
-        </div>
+          <div class="text-end" id="botoesAuth">
+            <a href="login.php" class="btn btn-outline-light me-2 mb-3 mb-lg-0" id="botaoEntrar">Entrar</a>
+            <a href="cadastro.php" class="btn btn-warning mb-3 mb-lg-0" id="botaoCadastrar">Cadastrar</a>
+          </div>
+
+          <div class="text-end d-none" id="menuUsuario">
+            <a href="#" id="linkPerfil" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Meu Perfil</a>
+            <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+          </div>
       </div>
     </div>
   </header>
 
 <div class="container my-1 py-1">
   <div class="d-flex justify-content-center align-items-center bg-dark rounded overflow-hidden" style="height: 300px;">
-    <div class="w-100 h-100 d-flex justify-content-center align-items-end" style="background-image: url('carroFundo.jpg'); background-position: left center;">
+    <div class="w-100 h-100 d-flex justify-content-center align-items-end" style="background-image: url('carroFundo.png'); background-position: left center;">
       <div class="d-flex gap-3 bg-white bg-opacity-10 p-3 rounded w-100 justify-content-center">
         <a href="?tipo_veiculo[]=2" class="btn btn-warning me-5 mb-3 mb-lg-0 <?php if (in_array(2, $tiposFiltrados)) echo 'fw-bold text-decoration-underline'; ?>">
           <img src="moto.png" style="height: 30px; width: auto;" class="me-1">Motos
@@ -126,10 +131,8 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <strong>Modelo:</strong> <?= htmlspecialchars($pub['modelo_carro']) ?><br>
                             <strong>Ano:</strong> <?= htmlspecialchars($pub['ano_carro']) ?><br>
                             <strong>Tipo:</strong> <?= ($pub['tipo_veiculo'] == 1) ? "Carro" : "Moto" ?>
-                            
                         </p>
                         <p><strong>Preço:</strong> R$ <?= number_format($pub['preco'], 2, ',', '.') ?></p>
-                        <strong>Contato:</strong> <?= htmlspecialchars($pub['contato']) ?><br>
                         <p class="card-text"><?= nl2br(htmlspecialchars($pub['conteudo'])) ?></p>
                     </div>
                     <div class="card-footer text-muted">
@@ -149,14 +152,46 @@ if ($result && mysqli_num_rows($result) > 0) {
   <div class="container align-items-center">
     <footer class="py-3 my-4">
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
     </footer>
   </div>
 
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('check_login.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.logged_in) {
+                const botoesAuth = document.getElementById('botoesAuth');
+                if (botoesAuth) {
+                    botoesAuth.classList.add('d-none');
+                }
+
+                const menuUser = document.getElementById('menuUsuario');
+                if (menuUser) {
+                    menuUser.classList.remove('d-none');
+                }
+                const perfilLink = document.getElementById('linkPerfil');
+                if (perfilLink) {
+                    if (data.tipo === 'admin') {
+                        perfilLink.setAttribute('href', 'admin.php');
+                    } else {
+                        perfilLink.setAttribute('href', 'user.php');
+                    }
+
+                    if (data.nome) {
+                        perfilLink.textContent = `${data.nome}`;
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Erro ao verificar login:', error));
+});
+</script>
 </body>
 </html>

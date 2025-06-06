@@ -26,7 +26,7 @@ if (isset($_GET['excluir'])) {
 }
 
 // Buscar publicações pendentes
-$sql = "SELECT p.id, u.nome AS nome_usuario, p.titulo, p.conteudo, p.modelo_carro, p.ano_carro, p.data_publicacao, p.imagem,p.contato
+$sql = "SELECT p.id, u.nome AS nome_usuario, p.titulo, p.conteudo, p.modelo_carro, p.ano_carro, p.data_publicacao, p.imagem, p.contato
         FROM publicacoes p
         JOIN usuarios u ON p.usuario_id = u.id
         WHERE p.aprovado = 0
@@ -51,6 +51,9 @@ $resultado = mysqli_query($conn, $sql);
           <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
           <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
         </ul>
+        <div class="text-end" id="menuUsuario">
+          <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+        </div>
       </div>
     </div>
   </header>
@@ -58,6 +61,10 @@ $resultado = mysqli_query($conn, $sql);
 <div class="container mt-5">
     <h2 class="mb-4 text-center">Painel de Administração</h2>
     <p class="text-center">Bem-vindo, <strong><?= htmlspecialchars($_SESSION['usuario_nome']) ?></strong>!</p>
+
+    <div class="text-center mb-4">
+      <a href="todosAnuncios.php" class="btn btn-primary">Ver Todos os Anúncios</a>
+    </div>
 
     <?php if (mysqli_num_rows($resultado) > 0): ?>
         <h4 class="mt-4 mb-3">Publicações Pendentes:</h4>
@@ -73,7 +80,7 @@ $resultado = mysqli_query($conn, $sql);
                             <h6 class="card-subtitle mb-2 text-muted">Por <?= htmlspecialchars($row['nome_usuario']) ?></h6>
                             <p class="mb-1">
                                 <strong>Modelo:</strong> <?= htmlspecialchars($row['modelo_carro']) ?><br>
-                                <strong>Ano:</strong> <?= htmlspecialchars($row['ano_carro']) ?><br>
+                                <strong>Ano:</strong> <?= htmlspecialchars($row['ano_carro']) ?>
                                 <strong>Contato:</strong> <?= htmlspecialchars($row['contato']) ?>
                             </p>
                             <p class="card-text"><?= nl2br(htmlspecialchars($row['conteudo'])) ?></p>
@@ -97,9 +104,8 @@ $resultado = mysqli_query($conn, $sql);
   <div class="container align-items-center">
     <footer class="py-3 my-4">
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>

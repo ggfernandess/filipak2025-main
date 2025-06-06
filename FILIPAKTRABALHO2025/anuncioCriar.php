@@ -1,4 +1,11 @@
-<link href="bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+  <title>Criar Anuncio</title>
+</head>
 
 <header class="bg-dark">
   <div class="container py-1">
@@ -7,6 +14,9 @@
         <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
           <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
       </ul>
+        <div class="text-end" id="menuUsuario">
+          <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+        </div>
     </div>
   </div>
 </header>
@@ -40,16 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = mysqli_prepare($conn, "INSERT INTO publicacoes 
     (usuario_id, titulo, conteudo, modelo_carro, ano_carro, data_publicacao, preco, imagem, tipo_veiculo, aprovado, contato) 
     VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?, 0, ?)");
-
-
+    
     if ($stmt) {
-       mysqli_stmt_bind_param($stmt, "isssidsis", $usuario_id, $titulo, $conteudo, $modelo_carro, $ano_carro, $preco, $imagem_nome, $tipo_veiculo,$contato);
+        mysqli_stmt_bind_param($stmt, "isssidsis", $usuario_id, $titulo, $conteudo, $modelo_carro, $ano_carro, $preco, $imagem_nome, $tipo_veiculo, $contato);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
         echo "<p class='alert alert-success'>Publicação enviada para aprovação!</p>";
     } else {
         echo "Erro: " . mysqli_error($conn);
     }
+
 }
 ?>
 <div class="container align-items-center text-center py-3">
@@ -86,12 +96,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>    
 </div>
 
+        <div class="mt-4 text-center">
+            <a href="user.php" class="btn btn-secondary">← Voltar para o Painel</a>
+        </div>
+
 <div class="container align-items-center">
   <footer class="py-3 my-4">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+      <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
       <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
       <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
     </ul>
     <p class="text-center text-body-secondary">© 2025 Company, Inc</p>

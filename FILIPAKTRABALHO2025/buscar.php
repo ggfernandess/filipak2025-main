@@ -81,6 +81,7 @@ $result = mysqli_stmt_get_result($stmt);
 </head>
 <body class="bg-light">
 
+
   <header class="bg-dark">
     <div class="container py-1">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -88,13 +89,19 @@ $result = mysqli_stmt_get_result($stmt);
           <li><img src="icone.png" alt="Página Inicial" style="height: 30px; width: 150px;" class="mt-2 me-4"></li> 
           <li class="d-none d-lg-block"><a href="index.php" class="btn btn-warning mb-3 mb-lg-0"><img src="home.png" style="height: 20px; width: auto;"></a></li>
         </ul>
-        <div class="text-end">
-          <a href="login.php"><button type="button" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Entrar</button></a>
-          <a href="cadastro.php"><button type="button" class="btn btn-warning mb-3 mb-lg-0">Cadastrar</button></a>
-        </div>
+          <div class="text-end" id="botoesAuth">
+            <a href="login.php" class="btn btn-outline-light me-2 mb-3 mb-lg-0" id="botaoEntrar">Entrar</a>
+            <a href="cadastro.php" class="btn btn-warning mb-3 mb-lg-0" id="botaoCadastrar">Cadastrar</a>
+          </div>
+
+          <div class="text-end d-none" id="menuUsuario">
+            <a href="#" id="linkPerfil" class="btn btn-outline-light me-2 mb-3 mb-lg-0">Meu Perfil</a>
+            <a href="logout.php" class="btn btn-danger mb-3 mb-lg-0">Sair</a>
+          </div>
       </div>
     </div>
   </header>
+
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Pesquisar:</h2>
@@ -175,14 +182,44 @@ document.getElementById('form-busca').addEventListener('submit', function(e) {
   <div class="container align-items-center">
     <footer class="py-3 my-4">
       <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">SAC</a></li>
+        <li class="nav-item"><a href="https://www.reclameaqui.com.br" class="nav-link px-2 text-body-secondary">SAC</a></li>
         <li class="nav-item"><a href="https://veiculos.fipe.org.br/" class="nav-link px-2 text-body-secondary">Tabela Fipe</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
         <li class="nav-item"><a href="sobre.php" class="nav-link px-2 text-body-secondary">Sobre nós</a></li>
       </ul>
       <p class="text-center text-body-secondary">© 2025 Company, Inc</p>
     </footer>
   </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('check_login.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.logged_in) {
+                const botoesAuth = document.getElementById('botoesAuth');
+                if (botoesAuth) {
+                    botoesAuth.classList.add('d-none');
+                }
 
+                const menuUser = document.getElementById('menuUsuario');
+                if (menuUser) {
+                    menuUser.classList.remove('d-none');
+                }
+                const perfilLink = document.getElementById('linkPerfil');
+                if (perfilLink) {
+                    if (data.tipo === 'admin') {
+                        perfilLink.setAttribute('href', 'admin.php');
+                    } else {
+                        perfilLink.setAttribute('href', 'user.php');
+                    }
+
+                    if (data.nome) {
+                        perfilLink.textContent = `${data.nome}`;
+                    }
+                }
+            }
+        })
+        .catch(error => console.error('Erro ao verificar login:', error));
+});
+</script>
 </body>
 </html>
